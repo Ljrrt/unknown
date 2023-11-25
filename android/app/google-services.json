@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "17833871974",
+    "project_id": "unknown-ljrrt",
+    "storage_bucket": "unknown-ljrrt.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:17833871974:android:dd5288f0a4aba025d4bba7",
+        "android_client_info": {
+          "package_name": "com.example.unknown"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwSi5fSrc1im19SEAIzlEyIeWb43AhhoA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -4,41 +4,41 @@ import 'package:unknown/typedefs/typedefs.dart';
 import 'auth_result.dart';
 
 @immutable
-class AuthState {
-  const AuthState({
+class UserAuth {
+  const UserAuth({
     required this.result,
     required this.isLoading,
-    required this.userId,
+    required this.accessToken,
   });
 
-  const AuthState.unknown()
+  const UserAuth.unknown()
       : result = null,
         isLoading = false,
-        userId = null;
+        accessToken = null;
 
   final AuthResult? result;
   final bool isLoading;
-  final UserId? userId;
+  final AccessToken? accessToken;
 
   /// Creates a copy of this instance but with the given fields replaced with the is loading value
-  AuthState copiedWithIsLoading(bool isLoading) => AuthState(
+  UserAuth copiedWithIsLoading(bool isLoading) => UserAuth(
         result: result,
         isLoading: isLoading,
-        userId: userId,
+        accessToken: accessToken,
       );
 
   /// Override == operator to compare AuthState objects
   @override
-  bool operator ==(covariant AuthState other) =>
+  bool operator ==(covariant UserAuth other) =>
       identical(this, other) ||
       (result == other.result &&
           isLoading == other.isLoading &&
-          userId == other.userId);
+          accessToken == other.accessToken);
 
   @override
   int get hashCode => Object.hash(
         result,
         isLoading,
-        userId,
+        accessToken,
       );
 }

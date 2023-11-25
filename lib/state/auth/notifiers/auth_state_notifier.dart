@@ -1,23 +1,21 @@
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:unknown/state/auth/backend/authenticator.dart';
+import 'package:flutter/foundation.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart' hide Provider;
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:unknown/state/auth/models/auth_result.dart';
-import 'package:unknown/state/auth/models/auth_state.dart';
-import 'package:unknown/state/user_info/backend/user_info_storage.dart';
-import 'package:unknown/typedefs/typedefs.dart';
+import 'package:unknown/state/auth/models/user_auth.dart';
+import 'package:unknown/state/constants/supabase_constants.dart';
 
-class AuthStateNotifier extends StateNotifier<AuthState> {
-  final _authenticator = const Authenticator();
-  final _userInfoStorage = const UserInfoStorage();
-
+class AuthStateNotifier extends StateNotifier<UserAuth> {
   /// First we start at unknown state, and if state object is changed,
   /// whoever is listening will be notified
+  final supabase = Supabase.instance.client;
 
-  AuthStateNotifier() : super(const AuthState.unknown()) {
-    if (_authenticator.isAlreadyLoggedIn) {
-      state = AuthState(
-        result: AuthResult.success,
+  AuthStateNotifier() : super(const UserAuth.unknown()) {
+    if (supabase.auth.currentUser != null) {
+      state = UserAuth(
+        result: AuthResult.loggedIn,
         isLoading: false,
-        userId: _authenticator.userId,
+        accessToken: supabase.auth.currentSession?.accessToken,
       );
     }
   }
@@ -27,28 +25,35 @@ class AuthStateNotifier extends StateNotifier<AuthState> {
     state = state.copiedWithIsLoading(true);
 
     /// Log out
-    await _authenticator.logOut();
+    await supabase.auth.signOut();
 
     /// Set state to unknown(logged out)
-    state = const AuthState.unknown();
+    state = const UserAuth.unknown();
   }
 
-  /// Log in with google
-  Future<void> loginWithGoogle() async {
+  /// Log in with spotify
+  Future<void> loginWithSpotify() async {
     state = state.copiedWithIsLoading(true);
-    final result = await _authenticator.logInWithGoogle();
-    final userId = _authenticator.userId;
-    if (result == AuthResult.success && userId != null) {
-      await saveUserInfo(
-        userId: userId,
-      );
-    }
-    state = AuthState(result: result, isLoading: false, userId: userId);
-  }
 
-  Future<void> saveUserInfo({required UserId userId}) =>
-      _userInfoStorage.saveUserInfo(
-          userId: userId,
-          displayName: _authenticator.displayName,
-          email: _authenticator.email);
+    /// Perform web based OAuth login
+
+    await supabase.auth.signInWithOAuth(
+      Provider.spotify,
+      redirectTo: kIsWeb ? null : SupabaseConstants.redirectUrl,
+      authScreenLaunchMode: LaunchMode.platformDefault,
+    );
+
+    /// Listen to auth state changes in order to detect when the OAuth login is complete.
+
+    supabase.auth.onAuthStateChange.listen((data) {
+      final AuthChangeEvent event = data.event;
+      state = UserAuth(
+        result: event == AuthChangeEvent.signedIn
+            ? AuthResult.loggedIn
+            : AuthResult.aborted,
+        isLoading: false,
+        accessToken: data.session?.accessToken,
+      );
+    });
+  }
 }

@@ -6,5 +6,5 @@ import 'package:unknown/state/auth/providers/auth_state_provider.dart';
 
 final isLoggedInProvider = Provider<bool>((ref) {
   final authState = ref.watch(authStateProvider);
-  return authState.result == AuthResult.success;
+  return authState.result == AuthResult.loggedIn;
 });

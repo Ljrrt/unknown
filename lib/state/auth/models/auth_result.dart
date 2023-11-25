@@ -1,5 +1,5 @@
 enum AuthResult {
   aborted,
-  success,
-  failure,
+  loggedIn,
+  loggedOut,
 }

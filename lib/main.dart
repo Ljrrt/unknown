@@ -1,20 +1,25 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:unknown/extensions/widget_extensions.dart';
+import 'package:unknown/state/constants/supabase_constants.dart';
 import 'package:unknown/state/providers/is_loading_provider.dart';
 import 'package:unknown/theme/theme_models.dart';
 import 'package:unknown/views/screens/home/home_screen.dart';
 import 'package:unknown/views/screens/login/login_screen.dart';
 
-import 'firebase_options.dart';
 import 'state/auth/providers/is_logged_in_provider.dart';
 
-/// Run app after firebase init
+/// Run app after supabase init
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
+
+  await Supabase.initialize(
+    url: SupabaseConstants.url,
+    anonKey: SupabaseConstants.anonKey,
   );
+
   runApp(const ProviderScope(child: App()));
 }
 
@@ -43,7 +48,7 @@ class App extends StatelessWidget {
           if (isLoggedIn) {
             return const HomeScreen();
           } else {
-            return const LoginScreen();
+            return const LoginScreen().backgroundColor(Colors.blue);
           }
         }),
       ),

@@ -1,1 +1,1 @@
-typedef UserId = String;
+typedef AccessToken = String;
