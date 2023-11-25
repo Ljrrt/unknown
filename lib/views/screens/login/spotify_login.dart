@@ -13,20 +13,22 @@ class SpotifyLogin extends ConsumerWidget {
     final isLoading =
         ref.watch(authStateProvider.select((value) => value.isLoading));
     return ElevatedButton(
-      //style: GlobalButtonStyle.primary,
       //even if it is an async function, we can just pass the function reference and keep going
       onPressed: ref.read(authStateProvider.notifier).loginWithSpotify,
-      child: const Row(
+      child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          ModularLottieAnimation(
+          const ModularLottieAnimation(
             height: 44,
             width: 44,
-            animation: LottieAnimation.google,
+            animation: LottieAnimation.spotifyLogo,
           ),
           Padding(
-            padding: EdgeInsets.all(20),
-            child: Text(GlobalStrings.logInGoogle),
+            padding: const EdgeInsets.all(20),
+            child: Text(
+              GlobalStrings.logInWithSpotify,
+              style: GlobalText.label.copyWith(color: GlobalColor.neutral50),
+            ),
           ),
         ],
       ),

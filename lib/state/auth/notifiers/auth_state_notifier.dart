@@ -28,7 +28,7 @@ class AuthStateNotifier extends StateNotifier<UserAuth> {
     await supabase.auth.signOut();
 
     /// Set state to unknown(logged out)
-    state = const UserAuth.unknown();
+    state = const UserAuth.loggedOut();
   }
 
   /// Log in with spotify

@@ -16,6 +16,11 @@ class UserAuth {
         isLoading = false,
         accessToken = null;
 
+  const UserAuth.loggedOut()
+      : result = AuthResult.loggedOut,
+        isLoading = false,
+        accessToken = null;
+
   final AuthResult? result;
   final bool isLoading;
   final AccessToken? accessToken;

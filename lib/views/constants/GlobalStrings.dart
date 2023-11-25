@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart' show immutable;
 @immutable
 class GlobalStrings {
   ///log in
-  static const logInGoogle = 'Log in with google';
+  static const logInWithSpotify = 'Link Spotify';
 
   ///log out
   static const logOut = 'Log out';
